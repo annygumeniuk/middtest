@@ -2,12 +2,20 @@
 
 
 {% block content %}
-  <h1>Category List</h1>
-  <ul>
+<h1>Categories</h1>
+    <ul>
     {% for category in categories %}
-      <li>{{ category.name }}</li>
-    {% empty %}
-      <li>No categories found.</li>
+        <li>
+            {{ category.name }} ({{ category.recipe_count }} recipes)
+            <ul>
+                {% for recipe in recipes %}
+                    {% if recipe.category == category %}
+                        <li>{{ recipe.title }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </li>
     {% endfor %}
-  </ul>
+    </ul>
+
 {% endblock %}

@@ -1,0 +1,4 @@
+/.env
+/data.json
+/db.sqlite3
+/.venv/
