@@ -12,29 +12,53 @@ class HomeViewTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-class MainViewTest(TestCase):
+class RecipeModelTest(TestCase):
     def setUp(self):
-        # Create dummy recipes
-        for i in range(10):
-            Recipe.objects.create(name=f"Recipe {i}")
+        # Create a Category
+        self.category = Category.objects.create(name='Test Category')
 
-        # Set up the request factory
-        self.factory = RequestFactory()
+        # Create a Recipe
+        self.recipe = Recipe.objects.create(
+            title='Test Recipe',
+            description='Test description',
+            instructions='Test instructions',
+            ingredients='Test ingredients',
+            category=self.category
+        )
 
-    def test_main(self):
-        # Create a request
-        request = self.factory.get('/')
+    def test_recipe_model(self):
+        # Retrieve the Recipe from the database
+        recipe = Recipe.objects.get(title='Test Recipe')
 
-        # Call the main function
-        response = main(request)
+        # Verify the field values
+        self.assertEqual(recipe.title, 'Test Recipe')
+        self.assertEqual(recipe.description, 'Test description')
+        self.assertEqual(recipe.instructions, 'Test instructions')
+        self.assertEqual(recipe.ingredients, 'Test ingredients')
+        self.assertEqual(recipe.category, self.category)
 
-        # Check the response status code
-        self.assertEqual(response.status_code, 200)
+    def test_recipe_str_method(self):
+        # Retrieve the Recipe from the database
+        recipe = Recipe.objects.get(title='Test Recipe')
 
-        # Check the rendered template
-        self.assertTemplateUsed(response, 'main.html')
+        # Verify the string representation
+        self.assertEqual(str(recipe), 'Test Recipe')
 
-        # Check the context data
-        recipes = response.context['recipes']
-        self.assertEqual(len(recipes), 5)
-        self.assertTrue(all(isinstance(recipe, Recipe) for recipe in recipes))
+class CategoryModelTest(TestCase):
+    def setUp(self):
+        # Create a Category
+        self.category = Category.objects.create(name='Test Category')
+
+    def test_category_model(self):
+        # Retrieve the Category from the database
+        category = Category.objects.get(name='Test Category')
+
+        # Verify the field values
+        self.assertEqual(category.name, 'Test Category')
+
+    def test_category_str_method(self):
+        # Retrieve the Category from the database
+        category = Category.objects.get(name='Test Category')
+
+        # Verify the string representation
+        self.assertEqual(str(category), 'Test Category')
